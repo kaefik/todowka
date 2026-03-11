@@ -31,4 +31,12 @@ register_exception_handlers(app)
 
 @app.get("/api/v1/health")
 def health_check():
-    return {"status": "ok"}
+    """Проверка здоровья API и подключения к БД"""
+    try:
+        from app.dependencies import SessionLocal
+        db = SessionLocal()
+        db.execute("SELECT 1")
+        db.close()
+        return {"status": "ok", "database": "connected"}
+    except Exception as e:
+        return {"status": "error", "database": "disconnected", "error": str(e)}
