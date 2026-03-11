@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.middleware.error_handler import register_exception_handlers
 from app.dependencies import engine
 from app.routes.tags import router as tags_router
@@ -24,6 +25,14 @@ app = FastAPI(
     version="1.0.0",
     description="REST API для управления задачами с поддержкой GTD методологии",
     lifespan=lifespan
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 register_exception_handlers(app)
