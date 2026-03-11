@@ -1,0 +1,271 @@
+{
+  "project": "Todo API with GTD methodology",
+  "created": "2025-03-11T00:00:00Z",
+  "guide": "tasks/00-guide.md",
+  "tasks": {
+    "L0/L0-01-create-structure.md": {
+      "title": "Создать структуру проекта и базовые файлы",
+      "layer": 0,
+      "effort": "S",
+      "depends_on": [],
+      "status": "DONE",
+      "completed_output": "Создана структура проекта с директориями app/, app/models/, app/schemas/, app/repositories/, app/services/, app/routes/, app/middleware/, app/auth/, tests/, tests/unit/, tests/integration/ и __init__.py файлами."
+    },
+    "L0/L0-02-create-config.md": {
+      "title": "Создать config.py с pydantic-settings",
+      "layer": 0,
+      "effort": "S",
+      "depends_on": ["L0/L0-01-create-structure.md"],
+      "status": "DONE",
+      "completed_output": "Создан app/config.py с классом Settings содержащим все поля конфигурации: DATABASE_URL, REDIS_URL, CELERY_BROKER_URL, CELERY_RESULT_BACKEND, SECRET_KEY, API_HOST, API_PORT, LOG_LEVEL, REMINDER_CHECK_INTERVAL."
+    },
+    "L0/L0-03-create-requirements.md": {
+      "title": "Создать requirements.txt с зависимостями",
+      "layer": 0,
+      "effort": "S",
+      "depends_on": [],
+      "status": "DONE",
+      "completed_output": "Создан requirements.txt со всеми зависимостями: fastapi>=0.104.0, uvicorn[standard]>=0.24.0, pydantic>=2.5.0, sqlalchemy>=2.0.0, pydantic-settings>=2.1.0, celery>=5.3.0, redis>=5.0.0."
+    },
+    "L0/L0-04-create-env-example.md": {
+      "title": "Создать файл .env.example",
+      "layer": 0,
+      "effort": "S",
+      "depends_on": ["L0/L0-02-create-config.md"],
+      "status": "DONE",
+      "completed_output": "Создан .env.example с плейсхолдерами для всех полей конфигурации: DATABASE_URL, REDIS_URL, CELERY_BROKER_URL, CELERY_RESULT_BACKEND, SECRET_KEY, API_HOST, API_PORT, LOG_LEVEL, REMINDER_CHECK_INTERVAL."
+    },
+    "L0/L0-05-create-exceptions.md": {
+      "title": "Создать exceptions.py с кастомными исключениями",
+      "layer": 0,
+      "effort": "S",
+      "depends_on": [],
+      "status": "DONE",
+      "completed_output": "Создан app/exceptions.py с классами исключений: NotFoundException (404), ValidationErrorException (422), ConflictException (409), ReminderException (500)."
+    },
+    "L0/L0-06-create-error-handler.md": {
+      "title": "Создать error_handler middleware",
+      "layer": 0,
+      "effort": "S",
+      "depends_on": ["L0/L0-05-create-exceptions.md"],
+      "status": "DONE",
+      "completed_output": "Создан app/middleware/error_handler.py с функцией register_exception_handlers содержащей обработчики для NotFoundException, ValidationErrorException, ConflictException, ReminderException и generic Exception."
+    },
+    "L0/L0-07-create-dependencies.md": {
+      "title": "Создать dependencies.py (get_db, get_services)",
+      "layer": 0,
+      "effort": "S",
+      "depends_on": ["L0/L0-02-create-config.md"],
+      "status": "DONE",
+      "completed_output": "Создан app/dependencies.py с функцией get_db() и placeholder функциями для всех сервисов: get_task_service, get_project_service, get_subtask_service, get_tag_service, get_context_service, get_area_service, get_notification_service."
+    },
+    "L0/L0-08-create-main.md": {
+      "title": "Создать main.py с настройкой FastAPI",
+      "layer": 0,
+      "effort": "S",
+      "depends_on": ["L0/L0-02-create-config.md", "L0/L0-06-create-error-handler.md", "L0/L0-07-create-dependencies.md"],
+      "status": "DONE",
+      "completed_output": "Создан app/main.py с FastAPI app, зарегистрированными обработчиками ошибок и health endpoint GET /api/v1/health."
+    },
+    "L1/L1-09-base-model.md": {
+      "title": "Создать базовую модель (app/models/base.py)",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": [],
+      "status": "READY",
+      "completed_output": null
+    },
+    "L1/L1-10-tag-model.md": {
+      "title": "Создать модель Tag",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": ["L1/L1-09-base-model.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-11-context-model.md": {
+      "title": "Создать модель Context",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": ["L1/L1-09-base-model.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-12-area-model.md": {
+      "title": "Создать модель Area",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": ["L1/L1-09-base-model.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-13-project-model.md": {
+      "title": "Создать модель Project",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": ["L1/L1-09-base-model.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-14-subtask-model.md": {
+      "title": "Создать модель Subtask",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": ["L1/L1-09-base-model.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-15-task-model.md": {
+      "title": "Создать модель Task с m2m к Tag",
+      "layer": 1,
+      "effort": "M",
+      "depends_on": ["L1/L1-09-base-model.md", "L1/L1-10-tag-model.md", "L1/L1-11-context-model.md", "L1/L1-12-area-model.md", "L1/L1-13-project-model.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-16-notification-model.md": {
+      "title": "Создать модель Notification",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": ["L1/L1-09-base-model.md", "L1/L1-15-task-model.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-17-db-init.md": {
+      "title": "Создать инициализацию БД в main.py",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": ["L1/L1-09-base-model.md", "L1/L1-10-tag-model.md", "L1/L1-11-context-model.md", "L1/L1-12-area-model.md", "L1/L1-13-project-model.md", "L1/L1-14-subtask-model.md", "L1/L1-15-task-model.md", "L1/L1-16-notification-model.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-18-pagination-schema.md": {
+      "title": "Создать схему пагинации (schemas/pagination.py)",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": [],
+      "status": "READY",
+      "completed_output": null
+    },
+    "L1/L1-19-tag-schemas.md": {
+      "title": "Создать схемы Tag (Create, Response)",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": ["L1/L1-10-tag-model.md", "L1/L1-18-pagination-schema.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-20-context-schemas.md": {
+      "title": "Создать схемы Context",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": ["L1/L1-11-context-model.md", "L1/L1-18-pagination-schema.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-21-area-schemas.md": {
+      "title": "Создать схемы Area",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": ["L1/L1-12-area-model.md", "L1/L1-18-pagination-schema.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-22-project-schemas.md": {
+      "title": "Создать схемы Project",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": ["L1/L1-13-project-model.md", "L1/L1-18-pagination-schema.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-23-subtask-schemas.md": {
+      "title": "Создать схемы Subtask",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": ["L1/L1-14-subtask-model.md", "L1/L1-18-pagination-schema.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-24-notification-schemas.md": {
+      "title": "Создать схемы Notification",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": ["L1/L1-16-notification-model.md", "L1/L1-18-pagination-schema.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-25-task-schemas.md": {
+      "title": "Создать схемы Task (Create, Update, Response)",
+      "layer": 1,
+      "effort": "M",
+      "depends_on": ["L1/L1-15-task-model.md", "L1/L1-18-pagination-schema.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-26-base-repository.md": {
+      "title": "Создать базовый репозиторий",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": ["L1/L1-09-base-model.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-27-tag-repository.md": {
+      "title": "Создать репозиторий Tag",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": ["L1/L1-26-base-repository.md", "L1/L1-10-tag-model.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-28-context-repository.md": {
+      "title": "Создать репозиторий Context",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": ["L1/L1-26-base-repository.md", "L1/L1-11-context-model.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-29-area-repository.md": {
+      "title": "Создать репозиторий Area",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": ["L1/L1-26-base-repository.md", "L1/L1-12-area-model.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-30-project-repository.md": {
+      "title": "Создать репозиторий Project",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": ["L1/L1-26-base-repository.md", "L1/L1-13-project-model.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-31-subtask-repository.md": {
+      "title": "Создать репозиторий Subtask",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": ["L1/L1-26-base-repository.md", "L1/L1-14-subtask-model.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-32-notification-repository.md": {
+      "title": "Создать репозиторий Notification",
+      "layer": 1,
+      "effort": "S",
+      "depends_on": ["L1/L1-26-base-repository.md", "L1/L1-16-notification-model.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    },
+    "L1/L1-33-task-repository.md": {
+      "title": "Создать репозиторий Task с фильтрами",
+      "layer": 1,
+      "effort": "M",
+      "depends_on": ["L1/L1-26-base-repository.md", "L1/L1-15-task-model.md"],
+      "status": "BLOCKED",
+      "completed_output": null
+    }
+  }
+}
