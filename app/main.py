@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.middleware.error_handler import register_exception_handlers
+from app.middleware.logging import LoggingMiddleware
 from app.dependencies import engine
 from app.routes.tags import router as tags_router
 from app.routes.contexts import router as contexts_router
@@ -34,6 +35,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.add_middleware(LoggingMiddleware)
 
 register_exception_handlers(app)
 
