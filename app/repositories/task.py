@@ -1,8 +1,7 @@
 from typing import Optional, List
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
-from app.models.task import Task, TaskStatus
-from app.models.notification import task_tags
+from app.models.task import Task, TaskStatus, task_tags
 from app.repositories.base import BaseRepository
 
 
