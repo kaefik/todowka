@@ -4,6 +4,13 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from app.main import app
 from app.models.base import Base
+from app.models.task import Task
+from app.models.project import Project
+from app.models.tag import Tag
+from app.models.context import Context
+from app.models.area import Area
+from app.models.subtask import Subtask
+from app.models.notification import Notification
 
 
 engine = create_engine("sqlite:///:memory:")

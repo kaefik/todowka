@@ -64,9 +64,10 @@ def root():
 def health_check():
     """Проверка здоровья API и подключения к БД"""
     try:
+        from sqlalchemy import text
         from app.dependencies import SessionLocal
         db = SessionLocal()
-        db.execute("SELECT 1")
+        db.execute(text("SELECT 1"))
         db.close()
         return {"status": "ok", "database": "connected"}
     except Exception as e:
