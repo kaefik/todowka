@@ -13,7 +13,10 @@ class TaskRepository(BaseRepository[Task]):
         query = self.db.query(Task)
 
         if 'status' in filters and filters['status']:
-            query = query.filter(Task.status == filters['status'])
+            if filters['status'] == 'completed':
+                query = query.filter(Task.completed == True)
+            else:
+                query = query.filter(Task.status == filters['status'])
         if 'project_id' in filters and filters['project_id']:
             query = query.filter(Task.project_id == filters['project_id'])
         if 'context_id' in filters and filters['context_id']:
