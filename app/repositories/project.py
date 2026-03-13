@@ -8,6 +8,19 @@ class ProjectRepository(BaseRepository[Project]):
     def __init__(self, db: Session):
         super().__init__(db, Project)
 
+    def get_filtered(self, filters: dict) -> tuple[list[Project], int]:
+        query = self.db.query(Project)
+
+        if 'status' in filters and filters['status']:
+            query = query.filter(Project.status == filters['status'])
+
+        total = query.count()
+        limit = filters.get('limit', 100)
+        offset = filters.get('offset', 0)
+        projects = query.offset(offset).limit(limit).all()
+
+        return projects, total
+
     def get_by_status(self, status: str) -> list[Project]:
         return self.db.query(Project).filter(Project.status == status).all()
 

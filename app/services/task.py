@@ -45,6 +45,10 @@ class TaskService:
             raise NotFoundException(f"Task with id {id} not found")
         return TaskResponse.model_validate(task)
 
+    def get_next_actions(self) -> list[TaskResponse]:
+        tasks = self.task_repo.get_next_actions()
+        return [TaskResponse.model_validate(task) for task in tasks]
+
     def create_task(self, title: str, description: str = None, priority: str = None,
                     due_date: datetime = None, reminder_time: datetime = None,
                     project_id: int = None, context_id: int = None, area_id: int = None,

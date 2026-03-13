@@ -18,6 +18,13 @@ class ReminderRequest(BaseModel):
     time: datetime
 
 
+@router.get("/next-actions", response_model=list[TaskResponse])
+def get_next_actions(
+    task_service: TaskService = Depends(get_task_service)
+):
+    return task_service.get_next_actions()
+
+
 @router.get("", response_model=PaginationResponse[TaskResponse])
 def get_tasks(
     page: int = Query(1, ge=1),
