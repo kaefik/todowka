@@ -93,10 +93,12 @@ REMINDER_CHECK_INTERVAL=60
 - Python 3.11+
 - Redis сервер
 
-### Запуск Redis
+### Установка и запуск Redis
 
 ```bash
-redis-server
+sudo dnf install redis
+sudo systemctl enable redis
+sudo systemctl start redis
 ```
 
 ### Запуск API
