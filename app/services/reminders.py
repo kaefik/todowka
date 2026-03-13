@@ -29,7 +29,7 @@ celery_app.conf.enable_utc = True
 
 @celery_app.task
 def check_and_send_reminders():
-    from app.main import SessionLocal
+    from app.dependencies import SessionLocal
 
     db = SessionLocal()
     try:
