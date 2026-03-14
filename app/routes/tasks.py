@@ -117,24 +117,8 @@ def partial_update_task(
     task: TaskUpdate,
     task_service: TaskService = Depends(get_task_service)
 ):
-    return task_service.update_task(
-        task_id,
-        task.title,
-        task.description,
-        task.completed,
-        task.priority,
-        task.due_date,
-        task.reminder_time,
-        task.project_id,
-        task.context_id,
-        task.area_id,
-        task.tag_ids,
-        task.status,
-        task.is_next_action,
-        task.waiting_for,
-        task.delegated_to,
-        task.someday
-    )
+    update_data = task.model_dump(exclude_unset=True)
+    return task_service.patch_task(task_id, update_data)
 
 
 @router.delete("/{task_id}", status_code=204)

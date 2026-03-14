@@ -49,11 +49,11 @@ class TaskService:
         tasks = self.task_repo.get_next_actions()
         return [TaskResponse.model_validate(task) for task in tasks]
 
-    def create_task(self, title: str, description: str = None, priority: str = None,
-                    due_date: datetime = None, reminder_time: datetime = None,
-                    project_id: int = None, context_id: int = None, area_id: int = None,
-                    tag_ids: list = None, status: str = None, is_next_action: bool = None,
-                    waiting_for: str = None, delegated_to: str = None, someday: bool = None) -> TaskResponse:
+    def create_task(self, title: str, description: Optional[str] = None, priority: Optional[str] = None,
+                    due_date: Optional[datetime] = None, reminder_time: Optional[datetime] = None,
+                    project_id: Optional[int] = None, context_id: Optional[int] = None, area_id: Optional[int] = None,
+                    tag_ids: Optional[list] = None, status: Optional[str] = None, is_next_action: Optional[bool] = None,
+                    waiting_for: Optional[str] = None, delegated_to: Optional[str] = None, someday: Optional[bool] = None) -> TaskResponse:
         if project_id and not self.project_service.project_repo.exists(project_id):
             raise NotFoundException(f"Project with id {project_id} not found")
 
@@ -78,11 +78,11 @@ class TaskService:
 
         return self.get_task(task.id)
 
-    def update_task(self, id: int, title: str = None, description: str = None, completed: bool = None,
-                    priority: str = None, due_date: datetime = None, reminder_time: datetime = None,
-                    project_id: int = None, context_id: int = None, area_id: int = None,
-                    tag_ids: list = None, status: str = None, is_next_action: bool = None,
-                    waiting_for: str = None, delegated_to: str = None, someday: bool = None) -> TaskResponse:
+    def update_task(self, id: int, title: Optional[str] = None, description: Optional[str] = None, completed: Optional[bool] = None,
+                    priority: Optional[str] = None, due_date: Optional[datetime] = None, reminder_time: Optional[datetime] = None,
+                    project_id: Optional[int] = None, context_id: Optional[int] = None, area_id: Optional[int] = None,
+                    tag_ids: Optional[list] = None, status: Optional[str] = None, is_next_action: Optional[bool] = None,
+                    waiting_for: Optional[str] = None, delegated_to: Optional[str] = None, someday: Optional[bool] = None) -> TaskResponse:
         if not self.task_repo.exists(id):
             raise NotFoundException(f"Task with id {id} not found")
 
@@ -122,6 +122,50 @@ class TaskService:
 
         if tag_ids is not None:
             self.tag_service.assign_tags(id, tag_ids)
+
+        return self.get_task(id)
+
+    def patch_task(self, id: int, task_data: dict) -> TaskResponse:
+        if not self.task_repo.exists(id):
+            raise NotFoundException(f"Task with id {id} not found")
+
+        update_data = {}
+        if 'title' in task_data:
+            update_data['title'] = task_data['title']
+        if 'description' in task_data:
+            update_data['description'] = task_data['description']
+        if 'completed' in task_data:
+            update_data['completed'] = task_data['completed']
+        if 'priority' in task_data:
+            update_data['priority'] = task_data['priority']
+        if 'due_date' in task_data:
+            update_data['due_date'] = task_data['due_date']
+        if 'reminder_time' in task_data:
+            update_data['reminder_time'] = task_data['reminder_time']
+        if 'project_id' in task_data:
+            project_id = task_data['project_id']
+            if project_id and not self.project_service.project_repo.exists(project_id):
+                raise NotFoundException(f"Project with id {project_id} not found")
+            update_data['project_id'] = project_id
+        if 'context_id' in task_data:
+            update_data['context_id'] = task_data['context_id']
+        if 'area_id' in task_data:
+            update_data['area_id'] = task_data['area_id']
+        if 'status' in task_data:
+            update_data['status'] = task_data['status']
+        if 'is_next_action' in task_data:
+            update_data['is_next_action'] = task_data['is_next_action']
+        if 'waiting_for' in task_data:
+            update_data['waiting_for'] = task_data['waiting_for']
+        if 'delegated_to' in task_data:
+            update_data['delegated_to'] = task_data['delegated_to']
+        if 'someday' in task_data:
+            update_data['someday'] = task_data['someday']
+
+        self.task_repo.update(id, **update_data)
+
+        if 'tag_ids' in task_data:
+            self.tag_service.assign_tags(id, task_data['tag_ids'])
 
         return self.get_task(id)
 
