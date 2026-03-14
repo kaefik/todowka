@@ -7,6 +7,7 @@ from app.schemas.tag import TagResponse
 class TaskCreate(BaseModel):
     title: str
     description: Optional[str] = None
+    completed: Optional[bool] = None
     priority: Optional[str] = None
     due_date: Optional[datetime] = None
     reminder_time: Optional[datetime] = None
@@ -19,6 +20,7 @@ class TaskCreate(BaseModel):
     waiting_for: Optional[str] = None
     delegated_to: Optional[str] = None
     someday: Optional[bool] = None
+    completed_at: Optional[datetime] = None
 
 
 class TaskUpdate(BaseModel):
@@ -37,6 +39,7 @@ class TaskUpdate(BaseModel):
     waiting_for: Optional[str] = None
     delegated_to: Optional[str] = None
     someday: Optional[bool] = None
+    completed_at: Optional[datetime] = None
 
 
 class TaskResponse(BaseModel):
@@ -54,9 +57,11 @@ class TaskResponse(BaseModel):
     someday: bool
     created_at: datetime
     updated_at: datetime
+    completed_at: Optional[datetime] = None
     project_id: Optional[int]
     context_id: Optional[int]
     area_id: Optional[int]
     tags: List[TagResponse]
+    deleted_at: Optional[datetime] = None
 
     model_config = ConfigDict(from_attributes=True)

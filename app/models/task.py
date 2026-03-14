@@ -45,6 +45,7 @@ class Task(Base, TimestampMixin):
     project_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("projects.id"), nullable=True)
     context_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("contexts.id"), nullable=True)
     area_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("areas.id"), nullable=True)
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
     tags: Mapped[list[Tag]] = relationship("Tag", secondary=task_tags, back_populates="tasks")
     subtasks: Mapped[list["Subtask"]] = relationship("Subtask", back_populates="task")
@@ -52,3 +53,4 @@ class Task(Base, TimestampMixin):
     context: Mapped["Context"] = relationship("Context", back_populates="tasks")
     area: Mapped["Area"] = relationship("Area", back_populates="tasks")
     notifications: Mapped[list["Notification"]] = relationship("Notification", back_populates="task")
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)

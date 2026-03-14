@@ -82,7 +82,8 @@ class TaskService:
                     priority: Optional[str] = None, due_date: Optional[datetime] = None, reminder_time: Optional[datetime] = None,
                     project_id: Optional[int] = None, context_id: Optional[int] = None, area_id: Optional[int] = None,
                     tag_ids: Optional[list] = None, status: Optional[str] = None, is_next_action: Optional[bool] = None,
-                    waiting_for: Optional[str] = None, delegated_to: Optional[str] = None, someday: Optional[bool] = None) -> TaskResponse:
+                    waiting_for: Optional[str] = None, delegated_to: Optional[str] = None, someday: Optional[bool] = None,
+                    completed_at: Optional[datetime] = None) -> TaskResponse:
         if not self.task_repo.exists(id):
             raise NotFoundException(f"Task with id {id} not found")
 
@@ -117,6 +118,8 @@ class TaskService:
             update_data['delegated_to'] = delegated_to
         if someday is not None:
             update_data['someday'] = someday
+        if completed_at is not None:
+            update_data['completed_at'] = completed_at
 
         self.task_repo.update(id, **update_data)
 
@@ -161,6 +164,8 @@ class TaskService:
             update_data['delegated_to'] = task_data['delegated_to']
         if 'someday' in task_data:
             update_data['someday'] = task_data['someday']
+        if 'completed_at' in task_data:
+            update_data['completed_at'] = task_data['completed_at']
 
         self.task_repo.update(id, **update_data)
 
@@ -179,7 +184,9 @@ class TaskService:
         if not task:
             raise NotFoundException(f"Task with id {id} not found")
 
-        updated = self.task_repo.update(id, completed=not task.completed)
+        new_completed = not task.completed
+        completed_at = datetime.now() if new_completed else None
+        updated = self.task_repo.update(id, completed=new_completed, completed_at=completed_at)
         return TaskResponse.model_validate(updated)
 
     def set_next_action(self, id: int, flag: bool) -> TaskResponse:
@@ -214,3 +221,20 @@ class TaskService:
             waiting_for=waiting_for
         )
         return TaskResponse.model_validate(updated)
+
+    def get_deleted_tasks(self) -> list[TaskResponse]:
+        tasks = self.task_repo.get_deleted()
+        return [TaskResponse.model_validate(task) for task in tasks]
+
+    def restore_task(self, id: int) -> TaskResponse:
+        task = self.task_repo.restore(id)
+        if not task:
+            raise NotFoundException(f"Task with id {id} not found")
+        return TaskResponse.model_validate(task)
+
+    def permanent_delete_task(self, id: int) -> None:
+        if not self.task_repo.permanent_delete(id):
+            raise NotFoundException(f"Task with id {id} not found")
+
+    def delete_all_from_trash(self) -> None:
+        self.task_repo.delete_all_from_trash()

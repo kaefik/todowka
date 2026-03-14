@@ -54,6 +54,13 @@ def get_tasks(
     return task_service.get_tasks(page, size, **filters)
 
 
+@router.get("/deleted", response_model=list[TaskResponse])
+def get_deleted_tasks(
+    task_service: TaskService = Depends(get_task_service)
+):
+    return task_service.get_deleted_tasks()
+
+
 @router.get("/{task_id}", response_model=TaskResponse)
 def get_task(
     task_id: int,
@@ -107,7 +114,8 @@ def update_task(
         task.is_next_action,
         task.waiting_for,
         task.delegated_to,
-        task.someday
+        task.someday,
+        task.completed_at
     )
 
 
@@ -153,3 +161,26 @@ def schedule_reminder(
     task_service: TaskService = Depends(get_task_service)
 ):
     return task_service.schedule_reminder(task_id, request.time)
+
+
+@router.post("/{task_id}/restore", response_model=TaskResponse)
+def restore_task(
+    task_id: int,
+    task_service: TaskService = Depends(get_task_service)
+):
+    return task_service.restore_task(task_id)
+
+
+@router.delete("/{task_id}/permanent", status_code=204)
+def permanent_delete_task(
+    task_id: int,
+    task_service: TaskService = Depends(get_task_service)
+):
+    task_service.permanent_delete_task(task_id)
+
+
+@router.delete("/deleted/all", status_code=204)
+def delete_all_from_trash(
+    task_service: TaskService = Depends(get_task_service)
+):
+    task_service.delete_all_from_trash()
