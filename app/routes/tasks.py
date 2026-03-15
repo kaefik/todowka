@@ -18,6 +18,10 @@ class ReminderRequest(BaseModel):
     time: datetime
 
 
+class WaitingRequest(BaseModel):
+    waiting_for: str
+
+
 @router.get("/next-actions", response_model=list[TaskResponse])
 def get_next_actions(
     task_service: TaskService = Depends(get_task_service)
@@ -161,6 +165,15 @@ def schedule_reminder(
     task_service: TaskService = Depends(get_task_service)
 ):
     return task_service.schedule_reminder(task_id, request.time)
+
+
+@router.post("/{task_id}/waiting", response_model=TaskResponse)
+def set_waiting(
+    task_id: int,
+    request: WaitingRequest,
+    task_service: TaskService = Depends(get_task_service)
+):
+    return task_service.set_waiting(task_id, request.waiting_for)
 
 
 @router.post("/{task_id}/restore", response_model=TaskResponse)
