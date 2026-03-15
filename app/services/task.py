@@ -51,6 +51,7 @@ class TaskService:
 
     def create_task(self, title: str, description: Optional[str] = None, priority: Optional[str] = None,
                     due_date: Optional[datetime] = None, reminder_time: Optional[datetime] = None,
+                    reminder_enabled: Optional[bool] = None,
                     project_id: Optional[int] = None, context_id: Optional[int] = None, area_id: Optional[int] = None,
                     tag_ids: Optional[list] = None, status: Optional[str] = None, is_next_action: Optional[bool] = None,
                     waiting_for: Optional[str] = None, delegated_to: Optional[str] = None, someday: Optional[bool] = None) -> TaskResponse:
@@ -63,6 +64,7 @@ class TaskService:
             priority=priority or "medium",
             due_date=due_date,
             reminder_time=reminder_time,
+            reminder_enabled=reminder_enabled or False,
             project_id=project_id,
             context_id=context_id,
             area_id=area_id,
@@ -80,6 +82,7 @@ class TaskService:
 
     def update_task(self, id: int, title: Optional[str] = None, description: Optional[str] = None, completed: Optional[bool] = None,
                     priority: Optional[str] = None, due_date: Optional[datetime] = None, reminder_time: Optional[datetime] = None,
+                    reminder_enabled: Optional[bool] = None,
                     project_id: Optional[int] = None, context_id: Optional[int] = None, area_id: Optional[int] = None,
                     tag_ids: Optional[list] = None, status: Optional[str] = None, is_next_action: Optional[bool] = None,
                     waiting_for: Optional[str] = None, delegated_to: Optional[str] = None, someday: Optional[bool] = None,
@@ -100,6 +103,8 @@ class TaskService:
             update_data['due_date'] = due_date
         if reminder_time is not None:
             update_data['reminder_time'] = reminder_time
+        if reminder_enabled is not None:
+            update_data['reminder_enabled'] = reminder_enabled
         if project_id is not None:
             if project_id and not self.project_service.project_repo.exists(project_id):
                 raise NotFoundException(f"Project with id {project_id} not found")
@@ -145,6 +150,8 @@ class TaskService:
             update_data['due_date'] = task_data['due_date']
         if 'reminder_time' in task_data:
             update_data['reminder_time'] = task_data['reminder_time']
+        if 'reminder_enabled' in task_data:
+            update_data['reminder_enabled'] = task_data['reminder_enabled']
         if 'project_id' in task_data:
             project_id = task_data['project_id']
             if project_id and not self.project_service.project_repo.exists(project_id):
