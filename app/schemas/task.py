@@ -11,6 +11,10 @@ class TaskCreate(BaseModel):
     priority: Optional[str] = None
     due_date: Optional[datetime] = None
     reminder_time: Optional[datetime] = None
+    reminder_enabled: Optional[bool] = None
+    recurrence_type: Optional[str] = None
+    recurrence_config: Optional[str] = None
+    timezone: Optional[str] = None
     project_id: Optional[int] = None
     context_id: Optional[int] = None
     area_id: Optional[int] = None
@@ -30,6 +34,10 @@ class TaskUpdate(BaseModel):
     priority: Optional[str] = None
     due_date: Optional[datetime] = None
     reminder_time: Optional[datetime] = None
+    reminder_enabled: Optional[bool] = None
+    recurrence_type: Optional[str] = None
+    recurrence_config: Optional[str] = None
+    timezone: Optional[str] = None
     project_id: Optional[int] = None
     context_id: Optional[int] = None
     area_id: Optional[int] = None
@@ -51,17 +59,21 @@ class TaskResponse(BaseModel):
     priority: str
     due_date: Optional[datetime]
     reminder_time: Optional[datetime]
+    reminder_enabled: bool
+    recurrence_type: Optional[str]
+    recurrence_config: Optional[str]
+    timezone: str
     is_next_action: bool
     waiting_for: Optional[str]
     delegated_to: Optional[str]
     someday: bool
     created_at: datetime
     updated_at: datetime
-    completed_at: Optional[datetime] = None
+    completed_at: Optional[datetime]
     project_id: Optional[int]
     context_id: Optional[int]
     area_id: Optional[int]
     tags: List[TagResponse]
-    deleted_at: Optional[datetime] = None
+    deleted_at: Optional[datetime]
 
     model_config = ConfigDict(from_attributes=True)

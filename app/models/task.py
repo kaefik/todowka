@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import String, Integer, Boolean, DateTime, ForeignKey, Table, Column
+from sqlalchemy import String, Integer, Boolean, DateTime, ForeignKey, Table, Column, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.models.base import Base, TimestampMixin
 from app.models.tag import Tag
@@ -37,6 +37,10 @@ class Task(Base, TimestampMixin):
     priority: Mapped[str] = mapped_column(String, default=TaskPriority.MEDIUM)
     due_date: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     reminder_time: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    reminder_enabled: Mapped[bool] = mapped_column(Boolean, default=False)
+    recurrence_type: Mapped[str | None] = mapped_column(String, nullable=True)
+    recurrence_config: Mapped[str | None] = mapped_column(Text, nullable=True)
+    timezone: Mapped[str] = mapped_column(String, default="UTC")
     is_next_action: Mapped[bool] = mapped_column(Boolean, default=False)
     waiting_for: Mapped[str | None] = mapped_column(String, nullable=True)
     delegated_to: Mapped[str | None] = mapped_column(String, nullable=True)
@@ -54,3 +58,4 @@ class Task(Base, TimestampMixin):
     area: Mapped["Area"] = relationship("Area", back_populates="tasks")
     notifications: Mapped[list["Notification"]] = relationship("Notification", back_populates="task")
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+
